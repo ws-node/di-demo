@@ -2,7 +2,7 @@ import { DIContainer } from "../base";
 import { InjectScope, InjectToken, Implement } from "../../declares";
 import { getDependencies } from "../../reflect";
 
-class ConstructorDI extends DIContainer {
+export class ConstructorDI extends DIContainer {
 
   public dependencyResolver = getDependencies;
 
