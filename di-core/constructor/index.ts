@@ -1,13 +1,12 @@
-import { InjectSystemBase } from "../base";
-import { di as container } from "./di";
+namespace DI.CtorDI {
+  export class ConstructorInjectSystem extends InjectSystemBase {
 
-export class ConstructorInjectSystem extends InjectSystemBase {
+    protected di = cdi;
 
-  protected di = container;
+    public run() {
+      this.di.complete();
+      console.log(this.di.getConfig());
+    }
 
-  public run() {
-    this.di.complete();
-    console.log(this.di.getConfig());
   }
-
 }

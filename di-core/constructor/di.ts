@@ -1,22 +1,20 @@
-import { DIContainer } from "../base";
-import { InjectScope, InjectToken, Implement } from "../../declares";
-import { getDependencies } from "../../reflect";
+namespace DI.CtorDI {
+  export class ConstructorDI extends DIContainer {
 
-export class ConstructorDI extends DIContainer {
+    public dependencyResolver = getDependencies;
 
-  public dependencyResolver = getDependencies;
+    public add<K, V>(token: InjectToken<K>, imp: Implement<V>, scope: InjectScope) {
+      console.log(token);
+      console.log(getDependencies(token));
+      this.set(token, {
+        token,
+        imp,
+        scope,
+        depts: getDependencies(token)
+      });
+    }
 
-  public add<K, V>(token: InjectToken<K>, imp: Implement<V>, scope: InjectScope) {
-    console.log(token);
-    console.log(getDependencies(token));
-    this.set(token, {
-      token,
-      imp,
-      scope,
-      depts: getDependencies(token)
-    });
   }
 
+  export const cdi = new ConstructorDI();
 }
-
-export const di = new ConstructorDI();

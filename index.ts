@@ -1,9 +1,11 @@
-import { CtorService01, CtorService02 } from "./service";
-import { DISystemContract } from "./declares";
-import { ConstructorInjectSystem } from "./di-core/constructor";
+namespace DI {
 
-const cdi: DISystemContract = new ConstructorInjectSystem();
-cdi.service(CtorService01);
-cdi.service(CtorService02);
-cdi.run();
-console.log("running");
+  import S = DIService;
+
+  const cdi: DISystemContract = new CtorDI.ConstructorInjectSystem();
+  cdi.service(S.CtorService01);
+  cdi.service(S.CtorService02);
+  cdi.run();
+  console.log("running");
+
+}

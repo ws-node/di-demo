@@ -1,45 +1,45 @@
-declare global {
-  interface Constructor<T> {
+namespace DI {
+  export interface Constructor<T> {
     new(...args: any[]): T;
   }
 
-  interface AbstractType<T> {
+  export interface AbstractType<T> {
     prototype: T;
   }
 
-  type Exist<T> = Exclude<T, undefined>;
+  export type Exist<T> = Exclude<T, undefined>;
 
-  type Nullable<T> = Exist<T> | null;
-}
+  export type Nullable<T> = Exist<T> | null;
+  export interface DISystemContract {
+    service<T>(service: Constructor<T>): DISystemContract;
+    run(): void;
+  }
 
-export interface DISystemContract {
-  service<T>(service: Constructor<T>): DISystemContract;
-  run(): void;
-}
+  export enum InjectScope {
+    Singleton = "singleton",
+    New = "new"
+  }
 
-export enum InjectScope {
-  Singleton = "singleton",
-  New = "new"
-}
+  export type InjectToken<T = any> = Constructor<T> | AbstractType<T>;
 
-export type InjectToken<T = any> = Constructor<T> | AbstractType<T>;
+  export interface ImplementType<T extends any> {
+    new(...args: any[]): T;
+    prototype: T;
+  }
 
-export interface ImplementType<T extends any> {
-  new(...args: any[]): T;
-  prototype: T;
-}
+  export interface ImplementInstance<T extends any> {
+    prototype: T;
+  }
 
-export interface ImplementInstance<T extends any> {
-  prototype: T;
-}
+  export type ImplementFactory<T> = () => T;
 
-export type ImplementFactory<T> = () => T;
+  export type Implement<T> = ImplementFactory<T> | ImplementInstance<T> | ImplementType<T>;
 
-export type Implement<T> = ImplementFactory<T> | ImplementInstance<T> | ImplementType<T>;
+  export interface DepedencyResolveEntry<T = any> {
+    token: InjectToken<T>;
+    imp: any;
+    depts: InjectToken<any>[];
+    scope: InjectScope;
+  }
 
-export interface DepedencyResolveEntry<T = any> {
-  token: InjectToken<T>;
-  imp: any;
-  depts: InjectToken<any>[];
-  scope: InjectScope;
 }

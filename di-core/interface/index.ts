@@ -1,5 +1,5 @@
-import { InjectSystemBase } from "../base";
+namespace DI {
+  export class InterfaceInjectSystem extends InjectSystemBase {
 
-export class InterfaceInjectSystem extends InjectSystemBase {
-
+  }
 }
