@@ -1,5 +1,5 @@
 ///<reference path="./../base.ts"/>
-namespace DI.CtorDI {
+namespace DI {
   export function Service() {
     return function <T>(target: Constructor<T>) {
       return target;

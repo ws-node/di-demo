@@ -1,6 +1,7 @@
-namespace DIService {
+///<reference path="./di-core/constructor/index.ts"/>
+namespace DI {
 
-  import Service = DI.CtorDI.Service;
+  const Service = DI.Service;
 
   //#region Constructor inject region
   @Service()

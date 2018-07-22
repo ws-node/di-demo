@@ -1,5 +1,5 @@
 ///<reference path="./di.ts"/>
-namespace DI.CtorDI {
+namespace DI {
   export class ConstructorInjectSystem extends InjectSystemBase {
 
     protected di = cdi;

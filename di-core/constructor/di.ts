@@ -1,5 +1,5 @@
 ///<reference path="./../base.ts"/>
-namespace DI.CtorDI {
+namespace DI {
   export class ConstructorDI extends DIContainer {
 
     public dependencyResolver = getDependencies;
