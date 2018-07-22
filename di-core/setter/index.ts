@@ -1,6 +1,5 @@
-///<reference path="./../base.ts"/>
-namespace DI {
-  export class SetterInjectSystem extends InjectSystemBase {
+import { InjectSystemBase } from "../base";
 
-  }
+export class SetterInjectSystem extends InjectSystemBase {
+
 }

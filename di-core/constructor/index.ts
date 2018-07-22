@@ -1,13 +1,13 @@
-///<reference path="./di.ts"/>
-namespace DI {
-  export class ConstructorInjectSystem extends InjectSystemBase {
+import { InjectSystemBase } from "../base";
+import { cdi } from "./di";
 
-    protected di = cdi;
+export class ConstructorInjectSystem extends InjectSystemBase {
 
-    public run() {
-      this.di.complete();
-      console.log(this.di.getConfig());
-    }
+  protected di = cdi;
 
+  public run() {
+    this.di.complete();
+    console.log(this.di.getConfig());
   }
+
 }
