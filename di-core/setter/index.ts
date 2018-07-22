@@ -1,5 +1,5 @@
 import { InjectSystemBase } from "../base";
 
-export class SetterInjectSystem extends InjectSystemBase {
+// export class SetterInjectSystem extends InjectSystemBase {
 
-}
+// }
