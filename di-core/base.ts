@@ -1,7 +1,7 @@
 import { Constructor, InjectScope, DISystemContract, ImplementFactory, Nullable, DepedencyResolveEntry, InjectToken, Implement } from "../declares";
 import { TypeCheck, setColor } from "../utils";
 
-export class InjectSystemBase implements DISystemContract {
+export abstract class InjectSystemBase implements DISystemContract {
 
   protected di!: DIContainer;
 
@@ -9,6 +9,8 @@ export class InjectSystemBase implements DISystemContract {
     this.di.add(service, service, InjectScope.New);
     return this;
   }
+
+  public abstract get<T>(token: InjectToken<T>): Nullable<T>;
 
   public run() { }
 
@@ -112,8 +114,8 @@ function createFactory(scope: InjectScope, fac: ImplementFactory<any>) {
 
 function resolveError(el: any, depts: any[]) {
   return invalidOperation(
-    `Resolve dependency error : the dependency queue is broken caused by [${(el && el.name) || "unknown name"}]. ` +
-    `the depedency list is [${(depts || []).map(i => i.name || "??").join(", ")}]`
+    `Resolve dependency error : the dependency queue is broken caused by [${setColor("green", (el && el.name) || "unknown name")}]. ` +
+    `the depedency list is [${setColor("blue", (depts || []).map(i => i.name || "??").join(", "))}]`
   );
 }
 

@@ -12,7 +12,7 @@ export type Exist<T> = Exclude<T, undefined>;
 export type Nullable<T> = Exist<T> | null;
 export interface DISystemContract {
   service<T>(service: Constructor<T>): DISystemContract;
-  get<T>(token: InjectToken<T>): T;
+  get<T>(token: InjectToken<T>): Nullable<T>;
   run(): void;
 }
 

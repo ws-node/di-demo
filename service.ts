@@ -13,7 +13,7 @@ export class CtorService01 {
 @Service()
 export class CtorService02 {
 
-  constructor(private service0: CtorService01) { }
+  constructor(private service0: CtorService01, private obj: Object) { }
 
   public showMessage() {
     return `service02 call : ${this.service0.showMessage()}`;
