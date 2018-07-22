@@ -1,3 +1,4 @@
+///<reference path="./../base.ts"/>
 namespace DI.CtorDI {
   export class ConstructorDI extends DIContainer {
 

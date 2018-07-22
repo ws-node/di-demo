@@ -1,3 +1,4 @@
+///<reference path="./../declares.ts"/>
 namespace DI {
 
   export class InjectSystemBase implements DISystemContract {

@@ -1,3 +1,4 @@
+///<reference path="./di.ts"/>
 namespace DI.CtorDI {
   export class ConstructorInjectSystem extends InjectSystemBase {
 

@@ -1,3 +1,5 @@
+///<reference path="./reflect.ts"/>
+///<reference path="./utils.ts"/>
 namespace DI {
   export interface Constructor<T> {
     new(...args: any[]): T;
