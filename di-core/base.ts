@@ -92,7 +92,8 @@ export abstract class DIContainer {
   private resolve() {
     const queue = Array.from(this.map.values());
     this.sort(queue.filter(item => item.fac === null)).forEach(item => {
-      item.fac = () => new (item.imp)(...this.getDepedencies(item.imp));
+      const depts = item.depts.length === 0 ? [] : this.getDepedencies(item.imp);
+      item.fac = () => new (item.imp)(...depts);
     });
     queue.forEach(item => {
       const { fac, scope } = item;
