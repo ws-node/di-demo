@@ -6,7 +6,6 @@ import {
   Nullable,
   InjectToken,
   Implement,
-  ImplementInstance,
   ImplementFactory,
   ImplementType
 } from "../declares";
@@ -17,9 +16,9 @@ export abstract class InjectSystemBase implements DISystemContract {
   protected di!: DIContainer;
 
   service<T>(service: Constructor<T>, scope?: InjectScope): DISystemContract;
-  service<T, V>(token: InjectToken<T>, imp: ImplementType<V>, scope?: InjectScope): DISystemContract;
   service<T, V>(token: InjectToken<T>, fac: ImplementFactory<V>, scope?: InjectScope): DISystemContract;
-  service<T, V>(token: InjectToken<T>, instance: ImplementInstance<V>, scope?: InjectScope): DISystemContract;
+  service<T, V>(token: InjectToken<T>, instance: V, scope?: InjectScope): DISystemContract;
+  service<T, V>(token: InjectToken<T>, imp: ImplementType<V>, scope?: InjectScope): DISystemContract;
   public service<T>(...args: any[]): DISystemContract {
     const [token, ...others] = args;
     if (!token) throw new Error("inject error : empty injection.");
