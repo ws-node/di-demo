@@ -1,4 +1,15 @@
-import { Constructor, InjectScope, DISystemContract, ImplementFactory, Nullable, DepedencyResolveEntry, InjectToken, Implement, ImplementInstance, ImplementType } from "../declares";
+import {
+  Constructor,
+  InjectScope,
+  DISystemContract,
+  DepedencyResolveEntry,
+  Nullable,
+  InjectToken,
+  Implement,
+  ImplementInstance,
+  ImplementFactory,
+  ImplementType
+} from "../declares";
 import { TypeCheck, setColor } from "../utils";
 
 export abstract class InjectSystemBase implements DISystemContract {
@@ -12,7 +23,9 @@ export abstract class InjectSystemBase implements DISystemContract {
   public service<T>(...args: any[]): DISystemContract {
     const [token, ...others] = args;
     if (!token) throw new Error("inject error : empty injection.");
-    if (others.length === 1) {
+    if (others.length === 0) {
+      this.di.add(token, token, InjectScope.Singleton);
+    } else if (others.length === 1) {
       if (typeof others[0] !== "string") {
         this.di.add(token, others[0], InjectScope.Singleton);
       } else {
