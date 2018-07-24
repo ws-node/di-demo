@@ -1,12 +1,29 @@
-import { Constructor, InjectScope, DISystemContract, ImplementFactory, Nullable, DepedencyResolveEntry, InjectToken, Implement } from "../declares";
+import { Constructor, InjectScope, DISystemContract, ImplementFactory, Nullable, DepedencyResolveEntry, InjectToken, Implement, ImplementInstance, ImplementType } from "../declares";
 import { TypeCheck, setColor } from "../utils";
 
 export abstract class InjectSystemBase implements DISystemContract {
 
   protected di!: DIContainer;
 
-  public service<T>(service: Constructor<T>): DISystemContract {
-    this.di.add(service, service, InjectScope.New);
+  service<T>(service: Constructor<T>, scope?: InjectScope): DISystemContract;
+  service<T, V>(token: InjectToken<T>, imp: ImplementType<V>, scope?: InjectScope): DISystemContract;
+  service<T, V>(token: InjectToken<T>, fac: ImplementFactory<V>, scope?: InjectScope): DISystemContract;
+  service<T, V>(token: InjectToken<T>, instance: ImplementInstance<V>, scope?: InjectScope): DISystemContract;
+  public service<T>(...args: any[]): DISystemContract {
+    const [token, ...others] = args;
+    if (!token) throw new Error("inject error : empty injection.");
+    if (others.length === 1) {
+      if (typeof others[0] !== "string") {
+        this.di.add(token, others[0], InjectScope.Singleton);
+      } else {
+        this.di.add(token, token, <InjectScope>others[0]);
+      }
+    } else if (others.length === 2) {
+      const [imp, scope] = others;
+      this.di.add(token, imp, scope);
+    } else {
+      throw new Error("inject error : too many injection parameters.");
+    }
     return this;
   }
 

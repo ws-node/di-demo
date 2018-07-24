@@ -11,7 +11,10 @@ export type Exist<T> = Exclude<T, undefined>;
 
 export type Nullable<T> = Exist<T> | null;
 export interface DISystemContract {
-  service<T>(service: Constructor<T>): DISystemContract;
+  service<T>(service: Constructor<T>, scope?: InjectScope): DISystemContract;
+  service<T, V>(token: InjectToken<T>, imp: ImplementType<V>, scope?: InjectScope): DISystemContract;
+  service<T, V>(token: InjectToken<T>, fac: ImplementFactory<V>, scope?: InjectScope): DISystemContract;
+  service<T, V>(token: InjectToken<T>, instance: ImplementInstance<V>, scope?: InjectScope): DISystemContract;
   get<T>(token: InjectToken<T>): Nullable<T>;
   run(): void;
 }
