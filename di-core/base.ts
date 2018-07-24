@@ -45,7 +45,7 @@ export abstract class InjectSystemBase implements DISystemContract {
 
 }
 
-export interface DIContainerEntry<T> extends DepedencyResolveEntry {
+export interface DIContainerEntry<T> extends DepedencyResolveEntry<T> {
   fac: Nullable<ImplementFactory<any>>;
   getInstance: Nullable<() => T>;
 }
