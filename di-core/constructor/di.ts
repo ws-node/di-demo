@@ -4,8 +4,6 @@ import { InjectToken, Implement, InjectScope } from "../../declares";
 
 export class ConstructorDI extends DIContainer {
 
-  public dependencyResolver = getDependencies;
-
   public add<K, V>(token: InjectToken<K>, imp: Implement<V>, scope: InjectScope) {
     this.set(token, {
       token,
