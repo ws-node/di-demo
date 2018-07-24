@@ -92,7 +92,7 @@ export abstract class DIContainer {
   private resolve() {
     const queue = Array.from(this.map.values());
     this.sort(queue.filter(item => item.fac === null)).forEach(item => {
-      item.fac = () => new (item.imp)(...this.getDepedencies(item.token));
+      item.fac = () => new (item.imp)(...this.getDepedencies(item.imp));
     });
     queue.forEach(item => {
       const { fac, scope } = item;
@@ -100,8 +100,18 @@ export abstract class DIContainer {
     });
   }
 
-  private getDepedencies<T>(token: InjectToken<T>) {
-    return this.dependencyResolver(token).map(i => this.get(i));
+  /**
+   * * The `imp_type`(`ImplementType<T>`) should be implement class constructor instead of interface token.
+   * @description
+   * @author Big Mogician
+   * @private
+   * @template T
+   * @param {ImplementType<T>} token
+   * @returns
+   * @memberof DIContainer
+   */
+  private getDepedencies<T>(imp_type: ImplementType<T>) {
+    return this.dependencyResolver(imp_type).map(i => this.get(i));
   }
 
   private sort(queue: DeptNode[]): DeptNode[] {
