@@ -1,19 +1,24 @@
 import { Service } from "./../di-core/constructor/decorator";
+import { createUUID, setColor } from "../utils";
 
 @Service()
 export class CtorService01 {
 
+  private id = createUUID();
+
   public showMessage(): string {
-    return "ctor-inject service instance";
+    return `always new service ${setColor("blue", this.id)}`;
   }
 
 }
 
 @Service()
-export class CtorAlwaysNewService01 {
+export class CtorSingletonService01 {
+
+  private id = createUUID();
 
   public showMessage(): string {
-    return "ctor-always-new-inject service instance";
+    return `singleton-inject service ${setColor("green", this.id)}`;
   }
 
 }
@@ -25,10 +30,12 @@ export abstract class InterfaceClass {
 @Service()
 export class CtorService02 implements InterfaceClass {
 
-  constructor(private service0: CtorService01, private newService: CtorAlwaysNewService01) { }
+  private id = createUUID();
+
+  constructor(private service0: CtorService01, private sService: CtorSingletonService01) { }
 
   public showMessage() {
-    return `service02 call : ${this.service0.showMessage()}`;
+    return `alaways new service02 [ ${setColor("cyan", this.id)} ] call(1) : ${this.sService.showMessage()}, call(2) : ${this.service0.showMessage()}`;
   }
 
 }

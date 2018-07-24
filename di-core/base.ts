@@ -133,11 +133,13 @@ function resolveUnder(node: DeptNode, sections: Array<DeptNode[]>, checkIndex: n
 
 function createFactory(scope: InjectScope, fac: ImplementFactory<any>) {
   if (scope === InjectScope.New) return () => fac();
-  return () => {
+  return (() => {
     let instance: any;
-    if (instance) return instance;
-    return instance = fac();
-  };
+    return () => {
+      if (instance) return instance;
+      return instance = fac();
+    };
+  })();
 }
 
 function resolveError(el: any, depts: any[]) {

@@ -1,3 +1,4 @@
+import uuid from "uuid/v4";
 
 function isObject(target: any) {
   return Object.prototype.toString.call(target) === "[object Object]";
@@ -43,4 +44,8 @@ export const Colors: { [key: string]: string } = {
 
 export function setColor(name: string, value: any): string {
   return `${Colors[name]}${value}${Colors.reset}`;
+}
+
+export function createUUID() {
+  return uuid();
 }
