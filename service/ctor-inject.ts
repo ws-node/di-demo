@@ -138,12 +138,12 @@ export class CtorService02 implements InterfaceClass {
 
   constructor(
     private service0: CtorService01,
-    // private service011: CtorService011,
-    // private service012: CtorService012,
-    // private service013: CtorService013,
-    // private service014: CtorService014,
-    // private service015: CtorService015,
-    // private service016: CtorService016,
+    private service011: CtorService011,
+    private service012: CtorService012,
+    private service013: CtorService013,
+    private service014: CtorService014,
+    private service015: CtorService015,
+    private service016: CtorService016,
     private sService: CtorSingletonService01) {
 
   }
