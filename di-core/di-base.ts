@@ -9,7 +9,6 @@ import {
 import { TypeCheck, setColor } from "../utils";
 
 export interface DIContainerEntry<T> extends DepedencyResolveEntry<T> {
-  singleton: Nullable<T>;
   fac: Nullable<ImplementFactory<any>>;
   getInstance: Nullable<() => T>;
   level: number;
@@ -31,7 +30,6 @@ export abstract class DIContainer {
     const isConstructor = !!((<any>imp).prototype);
     this.map.set(token, {
       ...entry,
-      singleton: null,
       fac: isFactory ? <ImplementFactory<any>>imp : !isConstructor ? () => imp : null,
       getInstance: null,
       level: -1
@@ -45,15 +43,7 @@ export abstract class DIContainer {
   public get<T>(token: InjectToken<T>): T | null {
     const value = this.map.get(token) || null;
     if (value === null || value.getInstance === null) return null;
-    // Use instance siglrton implements
-    if (value.singleton !== null) return value.singleton;
-    if (value.scope === InjectScope.Singleton) {
-      return (value.singleton = value.getInstance()) || null;
-    } else {
-      return (value.getInstance()) || null;
-    }
-    // Use factory singleton implements
-    // return value.getInstance() || null;
+    return value.getInstance() || null;
   }
 
   public getConfig() {
@@ -70,15 +60,10 @@ export abstract class DIContainer {
     const queue = Array.from(this.map.values());
     this.sort(queue).forEach(item => {
       const { token, imp, scope, depts } = item;
-      // Use instance siglrton implements
       if (!item.fac) {
-        item.getInstance = item.fac = () => new (imp)(...this.getDepedencies(depts));
+        item.fac = () => new (imp)(...this.getDepedencies(depts));
       }
-      // Use factory singleton implements
-      // if (!item.fac) {
-      //   item.fac = () => new (imp)(...this.getDepedencies(depts));
-      // }
-      // item.getInstance = createFactory(scope, item.fac);
+      item.getInstance = createFactory(scope, item.fac);
     });
   }
 
