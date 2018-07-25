@@ -28,7 +28,7 @@ for (let i = 0; i < 10000; i++) {
   cdi.get(CtorService01);
 }
 const afterTime01 = new Date().getTime();
-console.log(`10000-service01-calling cost ${afterTime01 - beforeTime01}ms`);
+console.log(`10^4-service01-calling cost ${afterTime01 - beforeTime01}ms`);
 
 // test service02
 const beforeTime = new Date().getTime();
@@ -36,4 +36,4 @@ for (let i = 0; i < 10000; i++) {
   cdi.get(InterfaceClass);
 }
 const afterTime = new Date().getTime();
-console.log(`10000-service02-calling cost ${afterTime - beforeTime}ms`);
+console.log(`10^4-service02-calling cost ${afterTime - beforeTime}ms`);

@@ -7,6 +7,7 @@ import {
   ImplementFactory
 } from "../declares";
 import { TypeCheck, setColor } from "../utils";
+import { DICache, GenerateRule } from "./di-cache";
 
 export interface DIContainerEntry<T> extends DepedencyResolveEntry<T> {
   fac: Nullable<ImplementFactory<any>>;
@@ -16,6 +17,12 @@ export interface DIContainerEntry<T> extends DepedencyResolveEntry<T> {
 type DeptNode = DIContainerEntry<any>;
 
 export abstract class DIContainer {
+
+  private cacheEnabled = false;
+  private cache = new DICache(this);
+
+  public get useCache() { return this.cacheEnabled; }
+  public set useCache(value: boolean) { this.cacheEnabled = value; }
 
   private sections: Array<DeptNode[]> = [];
   private map = new Map<any, DeptNode>();
@@ -43,11 +50,12 @@ export abstract class DIContainer {
   }
 
   public getConfig() {
-    const result: { [key: string]: any } = {};
-    Array.from(this.map.values())
-      .map(i => ({ token: i.token, depts: i.depts, scope: i.scope }))
-      .forEach((item, index) => { result[index] = item; });
-    return result;
+    return Array.from(this.map.values()).map(i => ({
+      token: i.token && (<any>i.token).name,
+      implement: (i.imp && (<any>i.imp.name)) || "[factory or instance]",
+      scope: i.scope,
+      depts: i.depts.map(i => (<any>i).name)
+    }));
   }
 
   private resolve() {
