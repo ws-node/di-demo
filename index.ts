@@ -7,25 +7,26 @@ import {
   CtorService015, CtorService016, CtorService0x01, CtorService0x02
 } from "./service";
 import { InjectScope } from "./declares";
+import { setColor } from "./utils";
 
 const cdi = new ConstructorInjectSystem();
 cdi
-  // .service(CtorService0x01, InjectScope.New)
-  // .service(CtorService0x02, InjectScope.New)
-  // .service(CtorService011, InjectScope.New)
-  // .service(CtorService012, InjectScope.New)
-  // .service(CtorService013, InjectScope.New)
-  // .service(CtorService014, InjectScope.New)
-  // .service(CtorService015, InjectScope.New)
-  // .service(CtorService016, InjectScope.New)
-  .service(CtorService0x01, InjectScope.Singleton)
-  .service(CtorService0x02, InjectScope.Singleton)
-  .service(CtorService011, InjectScope.Singleton)
-  .service(CtorService012, InjectScope.Singleton)
-  .service(CtorService013, InjectScope.Singleton)
-  .service(CtorService014, InjectScope.Singleton)
-  .service(CtorService015, InjectScope.Singleton)
-  .service(CtorService016, InjectScope.Singleton)
+  .service(CtorService0x01, InjectScope.New)
+  .service(CtorService0x02, InjectScope.New)
+  .service(CtorService011, InjectScope.New)
+  .service(CtorService012, InjectScope.New)
+  .service(CtorService013, InjectScope.New)
+  .service(CtorService014, InjectScope.New)
+  .service(CtorService015, InjectScope.New)
+  .service(CtorService016, InjectScope.New)
+  // .service(CtorService0x01, InjectScope.Singleton)
+  // .service(CtorService0x02, InjectScope.Singleton)
+  // .service(CtorService011, InjectScope.Singleton)
+  // .service(CtorService012, InjectScope.Singleton)
+  // .service(CtorService013, InjectScope.Singleton)
+  // .service(CtorService014, InjectScope.Singleton)
+  // .service(CtorService015, InjectScope.Singleton)
+  // .service(CtorService016, InjectScope.Singleton)
   .service(CtorService01, InjectScope.New)
   .service(InterfaceClass, CtorService02, InjectScope.New)
   .service(CtorSingletonService01, InjectScope.Singleton)
@@ -50,7 +51,7 @@ for (let i = 0; i < 10000; i++) {
   cdi.get(CtorService01);
 }
 const afterTime01 = new Date().getTime();
-console.log(`10^4-service01-calling cost ${afterTime01 - beforeTime01}ms`);
+console.log(`10^4-service01-calling cost ${setColor("green", afterTime01 - beforeTime01)}ms`);
 
 // test service02
 const beforeTime = new Date().getTime();
@@ -58,4 +59,4 @@ for (let i = 0; i < 10000; i++) {
   cdi.get(InterfaceClass);
 }
 const afterTime = new Date().getTime();
-console.log(`10^4-service02-calling cost ${afterTime - beforeTime}ms`);
+console.log(`10^4-service02-calling cost ${setColor("red", afterTime - beforeTime)}ms`);
