@@ -8,24 +8,31 @@ import {
 } from "../declares";
 import { TypeCheck, setColor } from "../utils";
 import { DICache, GenerateRule } from "./di-cache";
+import { ENETUNREACH } from "constants";
 
 export interface DIContainerEntry<T> extends DepedencyResolveEntry<T> {
   fac: Nullable<ImplementFactory<any>>;
   getInstance: Nullable<() => T>;
+  level: number;
 }
 
 type DeptNode = DIContainerEntry<any>;
 
+const USE_CACHE = Symbol("di-core::cacheEnabled");
+
 export abstract class DIContainer {
 
-  private cacheEnabled = false;
+  //#region cache
+  private [USE_CACHE] = false;
   private cache = new DICache(this);
 
-  public get useCache() { return this.cacheEnabled; }
-  public set useCache(value: boolean) { this.cacheEnabled = value; }
+  public get useCache() { return this[USE_CACHE]; }
+  public set useCache(value: boolean) { this[USE_CACHE] = value; }
+  //#endregion
 
   private sections: Array<DeptNode[]> = [];
   private map = new Map<any, DeptNode>();
+  private sorted: DeptNode[] = [];
 
   public abstract add<K, V>(token: InjectToken<K>, imp: Implement<V>, scope: InjectScope): void;
 
@@ -36,7 +43,8 @@ export abstract class DIContainer {
     this.map.set(token, {
       ...entry,
       fac: isFactory ? <ImplementFactory<any>>imp : !isConstructor ? () => imp : null,
-      getInstance: null
+      getInstance: null,
+      level: -1
     });
   }
 
@@ -44,28 +52,63 @@ export abstract class DIContainer {
     this.resolve();
   }
 
-  public get<T>(token: InjectToken<T>): Nullable<T> {
-    const value = this.map.get(token) || null;
-    return (value && value.getInstance && value.getInstance()) || null;
+  public get<T>(token: InjectToken<T>): T | null {
+    if (!this.useCache) {
+      const value = this.map.get(token) || null;
+      return (value && value.getInstance && value.getInstance()) || null;
+    }
+    //#region cache
+    const rule = this.cache.load(token);
+    if (rule && rule.fac !== null) {
+      return rule.fac();
+    } else {
+      return null;
+    }
+    //#endregion
   }
 
   public getConfig() {
-    return Array.from(this.map.values()).map(i => ({
-      token: i.token && (<any>i.token).name,
+    return this.sorted.map(i => ({
+      contract: i.token && (<any>i.token).name,
       implement: (i.imp && (<any>i.imp.name)) || "[factory or instance]",
       scope: i.scope,
-      depts: i.depts.map(i => (<any>i).name)
+      level: i.level,
+      dependencies: i.depts.map(i => (<any>i).name)
     }));
   }
 
   private resolve() {
     const queue = Array.from(this.map.values());
-    this.sort(queue.filter(item => item.fac === null)).forEach(item => {
-      item.fac = () => new (item.imp)(...this.getDepedencies(item.depts));
-    });
-    queue.forEach(item => {
-      const { fac, scope } = item;
-      item.getInstance = fac && createFactory(scope, fac);
+    //#region cahce
+    const createMapDepts: (item: GenerateRule | null) => GenerateRule = (item: GenerateRule | null) => {
+      return <GenerateRule>(item === null ? null : {
+        token: item.token,
+        enable: item.fac !== null,
+        fac: item.fac,
+        depts: <GenerateRule[]>(item.depts.map(i => createMapDepts(this.cache.load(i.token))).filter(i => !!i))
+      });
+    };
+    //#endregion
+    this.sort(queue).forEach(item => {
+      const { token, imp, scope, depts } = item;
+      //#region cache
+      if (this.useCache) {
+        const deptRules = <GenerateRule[]>depts.map(i => createMapDepts(this.cache.load(i))).filter(i => !!i);
+        console.log(scope);
+        deptRules.map(i => console.log(i.fac && i.fac.toString()));
+        this.cache.save(token, {
+          token,
+          enable: true,
+          fac: createFactory(scope,
+            item.fac === null ? (() => new (imp)(...deptRules.map(i => (i.fac && i.fac()) || null))) : item.fac),
+          depts: deptRules,
+        });
+      }
+      //#endregion
+      if (!item.fac) {
+        item.fac = () => new (imp)(...this.getDepedencies(depts));
+      }
+      item.getInstance = createFactory(scope, item.fac);
     });
   }
 
@@ -76,7 +119,10 @@ export abstract class DIContainer {
   private sort(queue: DeptNode[]): DeptNode[] {
     this.sections[0] = queue.filter(i => i.depts.length === 0);
     this.decideSection(queue.filter(i => i.depts.length > 0), queue, this.sections, 1);
-    return this.sections.reduce((pre, cur) => ([...pre, ...cur]));
+    this.sections.forEach((each, index) => {
+      each.forEach(i => i.level = index + 1);
+    });
+    return this.sorted = this.sections.reduce((pre, cur) => ([...pre, ...cur]));
   }
 
   private decideSection(queue: DeptNode[], sourceQueue: DeptNode[], sections: Array<DeptNode[]>, current: number) {

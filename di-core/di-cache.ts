@@ -3,8 +3,9 @@ import { DIContainer } from "./di-base";
 
 export interface GenerateRule<T = any> {
   token: InjectToken<T>;
-  fac: (...depts: InjectToken[]) => T;
+  fac: Nullable<(...depts: InjectToken[]) => T>;
   depts: GenerateRule[];
+  enable: boolean;
 }
 
 export class DICache {
@@ -17,7 +18,7 @@ export class DICache {
     this.cache.set(token, rule);
   }
 
-  public load<T>(token: InjectToken<T>): Nullable<GenerateRule<T>> {
+  public load<T>(token: InjectToken<T>): GenerateRule<T> | null {
     return this.cache.get(token) || null;
   }
 
