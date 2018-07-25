@@ -20,8 +20,8 @@ export interface DISystemContract {
 }
 
 export enum InjectScope {
-  Singleton = "singleton",
-  New = "new"
+  Singleton = 0,
+  New = 1
 }
 
 export type InjectToken<T = any> = Constructor<T> | AbstractType<T>;

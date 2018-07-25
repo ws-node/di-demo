@@ -7,10 +7,9 @@ import {
   ImplementFactory
 } from "../declares";
 import { TypeCheck, setColor } from "../utils";
-import { DICache, GenerateRule } from "./di-cache";
-import { ENETUNREACH } from "constants";
 
 export interface DIContainerEntry<T> extends DepedencyResolveEntry<T> {
+  singleton: Nullable<T>;
   fac: Nullable<ImplementFactory<any>>;
   getInstance: Nullable<() => T>;
   level: number;
@@ -18,17 +17,7 @@ export interface DIContainerEntry<T> extends DepedencyResolveEntry<T> {
 
 type DeptNode = DIContainerEntry<any>;
 
-const USE_CACHE = Symbol("di-core::cacheEnabled");
-
 export abstract class DIContainer {
-
-  //#region cache
-  private [USE_CACHE] = false;
-  private cache = new DICache(this);
-
-  public get useCache() { return this[USE_CACHE]; }
-  public set useCache(value: boolean) { this[USE_CACHE] = value; }
-  //#endregion
 
   private sections: Array<DeptNode[]> = [];
   private map = new Map<any, DeptNode>();
@@ -42,6 +31,7 @@ export abstract class DIContainer {
     const isConstructor = !!((<any>imp).prototype);
     this.map.set(token, {
       ...entry,
+      singleton: null,
       fac: isFactory ? <ImplementFactory<any>>imp : !isConstructor ? () => imp : null,
       getInstance: null,
       level: -1
@@ -53,18 +43,17 @@ export abstract class DIContainer {
   }
 
   public get<T>(token: InjectToken<T>): T | null {
-    if (!this.useCache) {
-      const value = this.map.get(token) || null;
-      return (value && value.getInstance && value.getInstance()) || null;
-    }
-    //#region cache
-    const rule = this.cache.load(token);
-    if (rule && rule.fac !== null) {
-      return rule.fac();
+    const value = this.map.get(token) || null;
+    if (value === null || value.getInstance === null) return null;
+    // Use instance siglrton implements
+    if (value.singleton !== null) return value.singleton;
+    if (value.scope === InjectScope.Singleton) {
+      return (value.singleton = value.getInstance()) || null;
     } else {
-      return null;
+      return (value.getInstance()) || null;
     }
-    //#endregion
+    // Use factory singleton implements
+    // return value.getInstance() || null;
   }
 
   public getConfig() {
@@ -79,36 +68,17 @@ export abstract class DIContainer {
 
   private resolve() {
     const queue = Array.from(this.map.values());
-    //#region cahce
-    const createMapDepts: (item: GenerateRule | null) => GenerateRule = (item: GenerateRule | null) => {
-      return <GenerateRule>(item === null ? null : {
-        token: item.token,
-        enable: item.fac !== null,
-        fac: item.fac,
-        depts: <GenerateRule[]>(item.depts.map(i => createMapDepts(this.cache.load(i.token))).filter(i => !!i))
-      });
-    };
-    //#endregion
     this.sort(queue).forEach(item => {
       const { token, imp, scope, depts } = item;
-      //#region cache
-      if (this.useCache) {
-        const deptRules = <GenerateRule[]>depts.map(i => createMapDepts(this.cache.load(i))).filter(i => !!i);
-        console.log(scope);
-        deptRules.map(i => console.log(i.fac && i.fac.toString()));
-        this.cache.save(token, {
-          token,
-          enable: true,
-          fac: createFactory(scope,
-            item.fac === null ? (() => new (imp)(...deptRules.map(i => (i.fac && i.fac()) || null))) : item.fac),
-          depts: deptRules,
-        });
-      }
-      //#endregion
+      // Use instance siglrton implements
       if (!item.fac) {
-        item.fac = () => new (imp)(...this.getDepedencies(depts));
+        item.getInstance = item.fac = () => new (imp)(...this.getDepedencies(depts));
       }
-      item.getInstance = createFactory(scope, item.fac);
+      // Use factory singleton implements
+      // if (!item.fac) {
+      //   item.fac = () => new (imp)(...this.getDepedencies(depts));
+      // }
+      // item.getInstance = createFactory(scope, item.fac);
     });
   }
 

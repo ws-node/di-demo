@@ -16,4 +16,3 @@ export class ConstructorDI extends DIContainer {
 }
 
 export const cdi = new ConstructorDI();
-// cdi.useCache = true;

@@ -25,7 +25,7 @@ export abstract class InjectSystemBase implements DISystemContract {
     if (others.length === 0) {
       this.di.add(token, token, InjectScope.Singleton);
     } else if (others.length === 1) {
-      if (typeof others[0] !== "string") {
+      if (typeof others[0] !== "number") {
         this.di.add(token, others[0], InjectScope.Singleton);
       } else {
         this.di.add(token, token, <InjectScope>others[0]);
