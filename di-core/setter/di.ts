@@ -27,7 +27,7 @@ export class SetterDI extends DIContainer {
             instance[key] = this.get(depts[index]);
           }
         });
-        if (prototype && prototype["onInit"]) {
+        if (prototype && prototype["onInit"] && typeof instance["onInit"] === "function") {
           instance["onInit"]();
         }
         return instance;
