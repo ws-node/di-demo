@@ -9,7 +9,7 @@ export class ConstructorDI extends DIContainer {
       token,
       imp,
       scope,
-      depts: getDependencies(<any>imp)
+      depts: getDependencies(imp)
     });
   }
 
