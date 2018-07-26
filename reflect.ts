@@ -10,6 +10,10 @@ export const RETURN_META_KEY = "design:returntype";
 
 export const INJECT_META_KEY = "di-demo::inject-setter";
 
-export function getDependencies<T>(target: T): InjectToken[] {
-  return Reflect.getMetadata(PARAMS_META_KEY, target) || [];
+export function getDependencies<T>(target: T, key?: string): InjectToken[] {
+  return Reflect.getMetadata(PARAMS_META_KEY, target, <string | symbol>key) || [];
+}
+
+export function getClassPropertyKeys<T>(target: T): string[] {
+  return Reflect.getMetadataKeys(target) || [];
 }
