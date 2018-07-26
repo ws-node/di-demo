@@ -18,12 +18,12 @@ export class SetterService01 implements OnInit {
   private _demo01!: SetterService0x01;
 
   @Inject()
-  private set "@demo01"(value: SetterService0x01) { this._demo01 = value; }
+  private set "#$^#@$^#^"(value: SetterService0x01) { this._demo01 = value; }
 
   private _demo02!: SetterService0x02;
 
   @Inject()
-  private "@setDemo02"(value: SetterService0x02) {
+  private "$%@$%@$%@$"(value: SetterService0x02) {
     this._demo02 = value;
   }
 
