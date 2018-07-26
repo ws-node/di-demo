@@ -1,16 +1,25 @@
 import { Inject } from "../di-core/setter/decorator";
 import { OnInit } from "../di-core/setter/lifecycle";
+import { createUUID, setColor } from "../utils";
 
 export class SetterService0x01 {
+
+  private id = createUUID();
+
   public showMessage() {
-    return "service-setter-01";
+    return `service-setter-01 : [ ${setColor("green", this.id)} ]`;
   }
+
 }
 
 export class SetterService0x02 {
+
+  private id = createUUID();
+
   public showMessage() {
-    return "service-setter-02";
+    return `service-setter-02 : [ ${setColor("cyan", this.id)} ]`;
   }
+
 }
 
 export class SetterService01 implements OnInit {
@@ -27,12 +36,14 @@ export class SetterService01 implements OnInit {
     this._demo02 = value;
   }
 
+  private id = createUUID();
+
   onInit(): void {
-    console.log(this._demo01);
+    // console.log(this._demo01);
   }
 
   public showMessage() {
-    console.log(`service01 : ${this._demo01.showMessage()} ; service02 : ${this._demo02.showMessage()}`);
+    console.log(`servoce00: ${setColor("red", this.id)}\nservice01 : ${this._demo01.showMessage()}\nservice02 : ${this._demo02.showMessage()}`);
   }
 
 }
