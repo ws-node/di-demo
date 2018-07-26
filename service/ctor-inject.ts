@@ -1,4 +1,4 @@
-import { Service } from "./../di-core/constructor/decorator";
+import { Service } from "../di-core/constructor/decorator";
 import { createUUID, setColor } from "../utils";
 
 @Service()
