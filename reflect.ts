@@ -15,5 +15,5 @@ export function getDependencies<T>(target: T, key?: string): InjectToken[] {
 }
 
 export function getClassPropertyKeys<T>(target: T): string[] {
-  return Reflect.getMetadataKeys(target) || [];
+  return Reflect.getMetadata(INJECT_META_KEY, target) || [];
 }

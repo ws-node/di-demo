@@ -23,6 +23,7 @@ export abstract class DIContainer {
   private sorted: DeptNode[] = [];
 
   public abstract add<K, V>(token: InjectToken<K>, imp: Implement<V>, scope: InjectScope): void;
+  public abstract createFactory<T>(imp: DIContainerEntry<T>): ImplementFactory<T>;
 
   protected set<T>(token: InjectToken<T>, entry: DepedencyResolveEntry) {
     const { imp } = entry;
@@ -56,19 +57,15 @@ export abstract class DIContainer {
     }));
   }
 
-  private resolve() {
-    const queue = Array.from(this.map.values());
-    this.sort(queue).forEach(item => {
-      const { token, imp, scope, depts } = item;
-      if (!item.fac) {
-        item.fac = () => new (imp)(...this.getDepedencies(depts));
-      }
-      item.getInstance = createFactory(scope, item.fac);
-    });
+  public getDepedencies<T>(depts: InjectToken[]) {
+    return depts.length === 0 ? [] : depts.map(i => this.get(i));
   }
 
-  private getDepedencies<T>(depts: InjectToken[]) {
-    return depts.length === 0 ? [] : depts.map(i => this.get(i));
+  private resolve() {
+    const queue = Array.from(this.map.values());
+    this.sort(queue)
+      .forEach(item =>
+        item.getInstance = scopeMark(item.scope, this.createFactory(item)));
   }
 
   private sort(queue: DeptNode[]): DeptNode[] {
@@ -103,7 +100,7 @@ function resolveUnder(node: DeptNode, sections: Array<DeptNode[]>, checkIndex: n
   return isresolved;
 }
 
-function createFactory(scope: InjectScope, fac: ImplementFactory<any>) {
+function scopeMark(scope: InjectScope, fac: ImplementFactory<any>) {
   if (scope === InjectScope.New) return () => fac();
   return (() => {
     let instance: any;
