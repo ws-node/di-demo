@@ -4,15 +4,16 @@ import {
   CtorSingletonService01, InterfaceClass,
   CtorService011, CtorService012,
   CtorService013, CtorService014,
-  CtorService015, CtorService016, CtorService0x01, CtorService0x02
+  CtorService015, CtorService016,
+  CtorService0x01, CtorService0x02
 } from "./service";
 import { InjectScope } from "./declares";
 import { setColor } from "./utils";
 
 const cdi = new ConstructorInjectSystem();
 cdi
-  .service(CtorService0x01, InjectScope.New)
-  .service(CtorService0x02, InjectScope.New)
+  .service(CtorService0x01, new CtorService0x01())
+  .service(CtorService0x02, () => new CtorService0x02(new CtorService0x01()), InjectScope.New)
   .service(CtorService011, InjectScope.New)
   .service(CtorService012, InjectScope.New)
   .service(CtorService013, InjectScope.New)
