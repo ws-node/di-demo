@@ -16,6 +16,7 @@ export interface DISystemContract {
   service<T, V>(token: InjectToken<T>, imp: ImplementType<V>, scope?: InjectScope): DISystemContract;
   service<T, V>(token: InjectToken<T>, instance: V): DISystemContract;
   get<T>(token: InjectToken<T>): T | null;
+  get<T>(token: InjectToken<T>, scopeId: string): T | null;
   run(): void;
 }
 

@@ -6,8 +6,10 @@ export class ConstructorInjectSystem extends InjectSystemBase {
 
   protected di = cdi;
 
-  public get<T>(token: InjectToken<T>) {
-    return this.di.get(token);
+  public get<T>(token: InjectToken<T>, scopeId?: string) {
+    return !scopeId ?
+      this.di.get(token) :
+      this.di.getScopeInstance(token, scopeId);
   }
 
   public run() {

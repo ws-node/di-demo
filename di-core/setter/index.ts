@@ -34,7 +34,10 @@ export function serverStart() {
     .service(InterfaceClass, Service02, InjectScope.New)
     .service(SingletonService01, InjectScope.Singleton)
     .run();
+
   console.log("running");
+  console.log("\n========TEST GET==========\n");
+
   const s02 = di.get(InterfaceClass);
   if (s02) {
     console.log(s02.showMessage());
@@ -47,6 +50,26 @@ export function serverStart() {
   if (s0203) {
     console.log(s0203.showMessage());
   }
+
+  console.log("\n========TEST SCOPE==========\n");
+
+  const scopeId01 = "scope-id-01";
+  const scopeId02 = "scope-id-02";
+
+  const s01s02 = di.get(InterfaceClass, scopeId01);
+  if (s01s02) {
+    console.log(s01s02.showMessage());
+  }
+  const s01s0202 = di.get(InterfaceClass, scopeId01);
+  if (s01s0202) {
+    console.log(s01s0202.showMessage());
+  }
+  const s02s0203 = di.get(InterfaceClass, scopeId02);
+  if (s02s0203) {
+    console.log(s02s0203.showMessage());
+  }
+
+  console.log("\n========TEST PERFORMANCE==========\n");
 
   // test service01
   const beforeTime01 = new Date().getTime();
@@ -63,4 +86,5 @@ export function serverStart() {
   }
   const afterTime = new Date().getTime();
   console.log(`10^4-service02-calling cost ${setColor("red", afterTime - beforeTime)}ms`);
+
 }

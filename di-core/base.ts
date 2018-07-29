@@ -39,7 +39,7 @@ export abstract class InjectSystemBase implements DISystemContract {
     return this;
   }
 
-  public abstract get<T>(token: InjectToken<T>): T | null;
+  public abstract get<T>(token: InjectToken<T>, scopeId?: string): T | null;
 
   public run() { }
 

@@ -1,14 +1,6 @@
 import { InjectToken } from "../declares";
 
-export interface DIScopePool {
-  setInstance<T>(token: InjectToken<T>, instance: T): void;
-  getInstance<T>(token: InjectToken<T>): T | null;
-  update(newMaps: Array<[InjectToken, any]>): void;
-  update(resolver: <T>(token: InjectToken<T>) => T | null): void;
-  dispose(): void;
-}
-
-export class ScopePool implements DIScopePool {
+export class DIScopePool {
 
   private instanceMap = new Map<InjectToken, any>();
 

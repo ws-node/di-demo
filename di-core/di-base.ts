@@ -50,6 +50,19 @@ export abstract class DIContainer {
     return value.getInstance() || null;
   }
 
+  public getScopeInstance<T>(token: InjectToken<T>, scopeId: string) {
+    const pool = this.scopePools.get(scopeId);
+    if (!pool) {
+      const instance = this.get(token);
+      const newPool = new DIScopePool();
+      newPool.setInstance(token, instance);
+      this.scopePools.set(scopeId, newPool);
+      return instance;
+    } else {
+      return pool.getInstance(token);
+    }
+  }
+
   public getConfig() {
     return this.sorted.map(i => ({
       contract: i.token && (<any>i.token).name,

@@ -6,8 +6,10 @@ export class SetterInjectSystem extends InjectSystemBase {
 
   protected di = sdi;
 
-  public get<T>(token: InjectToken<T>) {
-    return this.di.get(token);
+  public get<T>(token: InjectToken<T>, scopeId?: string) {
+    return !scopeId ?
+      this.di.get(token) :
+      this.di.getScopeInstance(token, scopeId);
   }
 
   public run() {
