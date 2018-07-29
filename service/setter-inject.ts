@@ -7,7 +7,7 @@ export class Service0x01 {
   private id = createUUID();
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -23,7 +23,7 @@ export class Service0x02 {
   }
 
   public showMessage(): string {
-    return this.id;
+    return `${this.id.substring(0, 8)} - ${setColor("yellow", this.s0x01.showMessage())}`;
   }
 
 }
@@ -39,7 +39,7 @@ export class Service011 {
   }
 
   public showMessage(): string {
-    return this.id;
+    return `${this.id.substring(0, 8)} - ${setColor("magenta", this.s0x02.showMessage())}`;
   }
 
 }
@@ -55,7 +55,7 @@ export class Service012 {
   }
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -71,7 +71,7 @@ export class Service013 {
   }
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -87,7 +87,7 @@ export class Service014 {
   }
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -103,7 +103,7 @@ export class Service015 {
   }
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -119,7 +119,7 @@ export class Service016 {
   }
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -129,7 +129,7 @@ export class SingletonService01 {
   private id = createUUID();
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -143,7 +143,7 @@ export class Service01 {
   private set "@injectService011"(service: Service011) { this.service011 = service; }
 
   public showMessage(): string {
-    return this.id;
+    return `${this.id.substring(0, 8)} - ${setColor("blue", this.service011.showMessage())}`;
   }
 
 }
@@ -206,9 +206,9 @@ export class Service02 implements InterfaceClass {
   }
 
   public showMessage() {
-    return `this service       : [${setColor("red", this.id)}]
-singleton service  : [${setColor("cyan", this.sService.showMessage())}]
-newable service    : [${setColor("green", this.service0.showMessage())}]\n`;
+    return `this service       : ${setColor("red", this.id.substring(0, 8))}
+singleton service  : ${setColor("cyan", this.sService.showMessage())}
+newable service    : ${setColor("green", this.service0.showMessage())}\n`;
   }
 
 }

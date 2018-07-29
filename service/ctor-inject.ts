@@ -7,7 +7,7 @@ export class Service0x01 {
   private id = createUUID();
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -20,7 +20,7 @@ export class Service0x02 {
   constructor(private s0x01: Service0x01) { }
 
   public showMessage(): string {
-    return this.id;
+    return `${this.id.substring(0, 8)} - ${setColor("yellow", this.s0x01.showMessage())}`;
   }
 
 }
@@ -33,7 +33,7 @@ export class Service011 {
   constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
-    return this.id;
+    return `${this.id.substring(0, 8)} - ${setColor("magenta", this.s0x02.showMessage())}`;
   }
 
 }
@@ -46,7 +46,7 @@ export class Service012 {
   constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -59,7 +59,7 @@ export class Service013 {
   constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -72,7 +72,7 @@ export class Service014 {
   constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -85,7 +85,7 @@ export class Service015 {
   constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -98,7 +98,7 @@ export class Service016 {
   constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 
 }
@@ -109,7 +109,7 @@ export class SingletonService01 {
   private id = createUUID();
 
   public showMessage(): string {
-    return this.id;
+    return this.id.substring(0, 8);
   }
 }
 
@@ -121,7 +121,7 @@ export class Service01 {
   constructor(private s0x02: Service011) { }
 
   public showMessage(): string {
-    return this.id;
+    return `${this.id.substring(0, 8)} - ${setColor("blue", this.s0x02.showMessage())}`;
   }
 
 }
@@ -148,9 +148,9 @@ export class Service02 implements InterfaceClass {
   }
 
   public showMessage() {
-    return `this service       : [${setColor("red", this.id)}]
-singleton service  : [${setColor("cyan", this.sService.showMessage())}]
-newable service    : [${setColor("green", this.service0.showMessage())}]\n`;
+    return `this service       : ${setColor("red", this.id.substring(0, 8))}
+singleton service  : ${setColor("cyan", this.sService.showMessage())}
+newable service    : ${setColor("green", this.service0.showMessage())}\n`;
   }
 
 }

@@ -14,8 +14,8 @@ export function serverStart() {
 
   const di = new SetterInjectSystem();
   di
-    .service(Service0x01, new Service0x01())
-    .service(Service0x02, () => new Service0x02(), InjectScope.New)
+    .service(Service0x01, () => new Service0x01())
+    .service(Service0x02, Service0x02, InjectScope.New)
     .service(Service011, InjectScope.New)
     .service(Service012, InjectScope.New)
     .service(Service013, InjectScope.New)
