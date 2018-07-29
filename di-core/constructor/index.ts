@@ -35,6 +35,53 @@ export function serverStart() {
     .run();
 
   console.log("running");
+
+  console.log("\n========TEST MANUALLY PERFORMANCE==========\n");
+
+  const mbefore01 = new Date().getTime();
+  const singleton_s0x01 = new Service0x01();
+  const singleton_s01 = new SingletonService01();
+  for (let i = 0; i < 10000; i++) {
+    new Service01(new Service011(new Service0x02(singleton_s0x01)));
+  }
+  const mafter01 = new Date().getTime();
+  console.log(`10^4-service01-calling cost ${setColor("green", mafter01 - mbefore01)}ms`);
+
+  const mbefore02 = new Date().getTime();
+  for (let i = 0; i < 10000; i++) {
+    const srv01 = new Service01(new Service011(new Service0x02(singleton_s0x01)));
+    new Service02(
+      srv01,
+      new Service011(new Service0x02(singleton_s0x01)),
+      new Service012(new Service0x02(singleton_s0x01)),
+      new Service013(new Service0x02(singleton_s0x01)),
+      new Service014(new Service0x02(singleton_s0x01)),
+      new Service015(new Service0x02(singleton_s0x01)),
+      new Service016(new Service0x02(singleton_s0x01)),
+      singleton_s01
+    );
+  }
+  const mafter02 = new Date().getTime();
+  console.log(`10^4-service02-calling cost ${setColor("red", mafter02 - mbefore02)}ms`);
+
+  console.log("\n========TEST DI PERFORMANCE==========\n");
+
+  // test service01
+  const beforeTime01 = new Date().getTime();
+  for (let i = 0; i < 10000; i++) {
+    di.get(Service01);
+  }
+  const afterTime01 = new Date().getTime();
+  console.log(`10^4-service01-calling cost ${setColor("green", afterTime01 - beforeTime01)}ms`);
+
+  // test service02
+  const beforeTime = new Date().getTime();
+  for (let i = 0; i < 10000; i++) {
+    di.get(InterfaceClass);
+  }
+  const afterTime = new Date().getTime();
+  console.log(`10^4-service02-calling cost ${setColor("red", afterTime - beforeTime)}ms`);
+
   console.log("\n========TEST GET==========\n");
 
   const s02 = di.get(InterfaceClass);
@@ -67,52 +114,5 @@ export function serverStart() {
   if (s02s0203) {
     console.log(s02s0203.showMessage());
   }
-
-  console.log("\n========TEST MANUALLY PERFORMANCE==========\n");
-
-  const mbefore01 = new Date().getTime();
-  const singleton_s0x01 = new Service0x01();
-  const singleton_s01 = new SingletonService01();
-  for (let i = 0; i < 10000; i++) {
-    new Service01(new Service011(new Service0x02(singleton_s0x01)));
-  }
-  const mafter01 = new Date().getTime();
-  console.log(`10^4-service01-calling cost ${setColor("green", mafter01 - mbefore01)}ms`);
-
-  const mbefore02 = new Date().getTime();
-  for (let i = 0; i < 10000; i++) {
-    const srv01 = new Service01(new Service011(new Service0x02(singleton_s0x01)));
-    new Service02(
-      srv01,
-      new Service011(new Service0x02(singleton_s0x01)),
-      new Service012(new Service0x02(singleton_s0x01)),
-      new Service013(new Service0x02(singleton_s0x01)),
-      new Service014(new Service0x02(singleton_s0x01)),
-      new Service015(new Service0x02(singleton_s0x01)),
-      new Service016(new Service0x02(singleton_s0x01)),
-      singleton_s01
-    );
-  }
-  const mafter02 = new Date().getTime();
-  console.log(`10^4-service02-calling cost ${setColor("red", mafter02 - mbefore02)}ms`);
-
-
-  console.log("\n========TEST DI PERFORMANCE==========\n");
-
-  // test service01
-  const beforeTime01 = new Date().getTime();
-  for (let i = 0; i < 10000; i++) {
-    di.get(Service01);
-  }
-  const afterTime01 = new Date().getTime();
-  console.log(`10^4-service01-calling cost ${setColor("green", afterTime01 - beforeTime01)}ms`);
-
-  // test service02
-  const beforeTime = new Date().getTime();
-  for (let i = 0; i < 10000; i++) {
-    di.get(InterfaceClass);
-  }
-  const afterTime = new Date().getTime();
-  console.log(`10^4-service02-calling cost ${setColor("red", afterTime - beforeTime)}ms`);
 
 }
