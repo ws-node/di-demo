@@ -2,48 +2,213 @@ import { Inject } from "../di-core/setter/decorator";
 import { OnInit } from "../di-core/setter/lifecycle";
 import { createUUID, setColor } from "../utils";
 
-export class SetterService0x01 {
+export class Service0x01 {
 
   private id = createUUID();
 
-  public showMessage() {
-    return `service-setter-01 : [ ${setColor("green", this.id)} ]`;
+  public showMessage(): string {
+    return this.id;
   }
 
 }
 
-export class SetterService0x02 {
+export class Service0x02 {
 
   private id = createUUID();
+  private s0x01!: Service0x01;
 
-  public showMessage() {
-    return `service-setter-02 : [ ${setColor("cyan", this.id)} ]`;
+  @Inject()
+  private "@setService0x01"(service: Service0x01) {
+    this.s0x01 = service;
+  }
+
+  public showMessage(): string {
+    return this.id;
   }
 
 }
 
-export class SetterService01 implements OnInit {
+export class Service011 {
 
-  private _demo01!: SetterService0x01;
-
-  @Inject()
-  private set "#$^#@$^#^"(value: SetterService0x01) { this._demo01 = value; }
-
-  private _demo02!: SetterService0x02;
+  private id = createUUID();
+  private s0x02!: Service0x02;
 
   @Inject()
-  private "$%@$%@$%@$"(value: SetterService0x02) {
-    this._demo02 = value;
+  private "@setService0x02"(service: Service0x02) {
+    this.s0x02 = service;
   }
+
+  public showMessage(): string {
+    return this.id;
+  }
+
+}
+
+export class Service012 {
+
+  private id = createUUID();
+  private s0x02!: Service0x02;
+
+  @Inject()
+  private "@setService0x02"(service: Service0x02) {
+    this.s0x02 = service;
+  }
+
+  public showMessage(): string {
+    return this.id;
+  }
+
+}
+
+export class Service013 {
+
+  private id = createUUID();
+  private s0x02!: Service0x02;
+
+  @Inject()
+  private "@setService0x02"(service: Service0x02) {
+    this.s0x02 = service;
+  }
+
+  public showMessage(): string {
+    return this.id;
+  }
+
+}
+
+export class Service014 {
+
+  private id = createUUID();
+  private s0x02!: Service0x02;
+
+  @Inject()
+  private "@setService0x02"(service: Service0x02) {
+    this.s0x02 = service;
+  }
+
+  public showMessage(): string {
+    return this.id;
+  }
+
+}
+
+export class Service015 {
+
+  private id = createUUID();
+  private s0x02!: Service0x02;
+
+  @Inject()
+  private "@setService0x02"(service: Service0x02) {
+    this.s0x02 = service;
+  }
+
+  public showMessage(): string {
+    return this.id;
+  }
+
+}
+
+export class Service016 {
+
+  private id = createUUID();
+  private s0x02!: Service0x02;
+
+  @Inject()
+  private "@setService0x02"(service: Service0x02) {
+    this.s0x02 = service;
+  }
+
+  public showMessage(): string {
+    return this.id;
+  }
+
+}
+
+export class SingletonService01 {
 
   private id = createUUID();
 
-  onInit(): void {
-    // console.log(this._demo01);
+  public showMessage(): string {
+    return this.id;
+  }
+
+}
+
+export class Service01 {
+
+  private id = createUUID();
+  private service011!: Service011;
+
+  @Inject()
+  private set "@injectService011"(service: Service011) { this.service011 = service; }
+
+  public showMessage(): string {
+    return this.id;
+  }
+
+}
+
+export abstract class InterfaceClass {
+  abstract showMessage(): string;
+}
+
+export class Service02 implements InterfaceClass {
+
+  private id = createUUID();
+
+  private service0!: Service01;
+  private service011!: Service011;
+  private service012!: Service012;
+  private service013!: Service013;
+  private service014!: Service014;
+  private service015!: Service015;
+  private service016!: Service016;
+  private sService!: SingletonService01;
+
+  @Inject()
+  private "@setService01"(service: Service01) {
+    this.service0 = service;
+  }
+
+  @Inject()
+  private "@setService011"(service: Service011) {
+    this.service011 = service;
+  }
+
+  @Inject()
+  private "@setService012"(service: Service012) {
+    this.service012 = service;
+  }
+
+  @Inject()
+  private "@setService013"(service: Service013) {
+    this.service013 = service;
+  }
+
+  @Inject()
+  private "@setService014"(service: Service014) {
+    this.service014 = service;
+  }
+
+  @Inject()
+  private "@setService015"(service: Service015) {
+    this.service015 = service;
+  }
+
+  @Inject()
+  private "@setService016"(service: Service016) {
+    this.service016 = service;
+  }
+
+  @Inject()
+  private "@setSingletonService01"(service: SingletonService01) {
+    this.sService = service;
   }
 
   public showMessage() {
-    console.log(`servoce00: ${setColor("red", this.id)}\nservice01 : ${this._demo01.showMessage()}\nservice02 : ${this._demo02.showMessage()}`);
+    return `this service       : [${setColor("red", this.id)}]
+singleton service  : [${setColor("cyan", this.sService.showMessage())}]
+newable service    : [${setColor("green", this.service0.showMessage())}]\n`;
   }
 
 }

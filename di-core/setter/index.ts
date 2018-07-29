@@ -1,46 +1,66 @@
 import { SetterInjectSystem } from "./system";
 import { InjectScope } from "../../declares";
-import { SetterService0x01, SetterService01, SetterService0x02 } from "../../service/setter-inject";
 import { setColor } from "../../utils";
+import {
+  Service02, Service01,
+  SingletonService01, InterfaceClass,
+  Service011, Service012,
+  Service013, Service014,
+  Service015, Service016,
+  Service0x01, Service0x02
+} from "./../../service/setter-inject";
 
 export function serverStart() {
 
-  const sdi = new SetterInjectSystem();
-  sdi
-    .service(SetterService0x01, InjectScope.Singleton)
-    .service(SetterService0x02, InjectScope.New)
-    .service(SetterService01, InjectScope.New)
+  const di = new SetterInjectSystem();
+  di
+    .service(Service0x01, new Service0x01())
+    .service(Service0x02, () => new Service0x02(), InjectScope.New)
+    .service(Service011, InjectScope.New)
+    .service(Service012, InjectScope.New)
+    .service(Service013, InjectScope.New)
+    .service(Service014, InjectScope.New)
+    .service(Service015, InjectScope.New)
+    .service(Service016, InjectScope.New)
+    // .service(Service0x01, InjectScope.Singleton)
+    // .service(Service0x02, InjectScope.Singleton)
+    // .service(Service011, InjectScope.Singleton)
+    // .service(Service012, InjectScope.Singleton)
+    // .service(Service013, InjectScope.Singleton)
+    // .service(Service014, InjectScope.Singleton)
+    // .service(Service015, InjectScope.Singleton)
+    // .service(Service016, InjectScope.Singleton)
+    .service(Service01, InjectScope.New)
+    .service(InterfaceClass, Service02, InjectScope.New)
+    .service(SingletonService01, InjectScope.Singleton)
     .run();
-
-  const service01 = sdi.get(SetterService01);
-  if (service01 !== null) {
-    service01.showMessage();
+  console.log("running");
+  const s02 = di.get(InterfaceClass);
+  if (s02) {
+    console.log(s02.showMessage());
   }
-
-  const service011 = sdi.get(SetterService01);
-  if (service011 !== null) {
-    service011.showMessage();
+  const s0202 = di.get(InterfaceClass);
+  if (s0202) {
+    console.log(s0202.showMessage());
   }
-
-  const service012 = sdi.get(SetterService01);
-  if (service012 !== null) {
-    service012.showMessage();
+  const s0203 = di.get(InterfaceClass);
+  if (s0203) {
+    console.log(s0203.showMessage());
   }
-
-  // test service0x02
-  const beforeTime01 = new Date().getTime();
-  for (let i = 0; i < 10000; i++) {
-    sdi.get(SetterService0x02);
-  }
-  const afterTime01 = new Date().getTime();
-  console.log(`10^4-service0x-calling cost ${setColor("green", afterTime01 - beforeTime01)}ms`);
 
   // test service01
+  const beforeTime01 = new Date().getTime();
+  for (let i = 0; i < 10000; i++) {
+    di.get(Service01);
+  }
+  const afterTime01 = new Date().getTime();
+  console.log(`10^4-service01-calling cost ${setColor("green", afterTime01 - beforeTime01)}ms`);
+
+  // test service02
   const beforeTime = new Date().getTime();
   for (let i = 0; i < 10000; i++) {
-    sdi.get(SetterService01);
+    di.get(InterfaceClass);
   }
   const afterTime = new Date().getTime();
-  console.log(`10^4-service01-calling cost ${setColor("red", afterTime - beforeTime)}ms`);
-
+  console.log(`10^4-service02-calling cost ${setColor("red", afterTime - beforeTime)}ms`);
 }

@@ -1,5 +1,3 @@
-export * from "./ctor-inject";
-
 //#region Interface inject region
 export class InterfaceInjectService {
 

@@ -12,7 +12,7 @@ export class SetterDI extends DIContainer {
       token,
       imp,
       scope,
-      depts: this.resolveRelations(prototype)
+      depts: this.resolveRelations(prototype || {})
     });
   }
 

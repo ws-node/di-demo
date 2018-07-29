@@ -7,7 +7,7 @@ export class Service0x01 {
   private id = createUUID();
 
   public showMessage(): string {
-    return `always new service ${setColor("blue", this.id)}`;
+    return this.id;
   }
 
 }
@@ -20,7 +20,7 @@ export class Service0x02 {
   constructor(private s0x01: Service0x01) { }
 
   public showMessage(): string {
-    return `always new service ${setColor("blue", this.id)}`;
+    return this.id;
   }
 
 }
@@ -33,7 +33,7 @@ export class Service011 {
   constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
-    return `always new service ${setColor("blue", this.id)}`;
+    return this.id;
   }
 
 }
@@ -46,7 +46,7 @@ export class Service012 {
   constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
-    return `always new service ${setColor("blue", this.id)}`;
+    return this.id;
   }
 
 }
@@ -59,7 +59,7 @@ export class Service013 {
   constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
-    return `always new service ${setColor("blue", this.id)}`;
+    return this.id;
   }
 
 }
@@ -72,7 +72,7 @@ export class Service014 {
   constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
-    return `always new service ${setColor("blue", this.id)}`;
+    return this.id;
   }
 
 }
@@ -85,7 +85,7 @@ export class Service015 {
   constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
-    return `always new service ${setColor("blue", this.id)}`;
+    return this.id;
   }
 
 }
@@ -98,7 +98,7 @@ export class Service016 {
   constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
-    return `always new service ${setColor("blue", this.id)}`;
+    return this.id;
   }
 
 }
@@ -109,9 +109,8 @@ export class SingletonService01 {
   private id = createUUID();
 
   public showMessage(): string {
-    return `singleton-inject service ${setColor("green", this.id)}`;
+    return this.id;
   }
-
 }
 
 @Service()
@@ -122,7 +121,7 @@ export class Service01 {
   constructor(private s0x02: Service011) { }
 
   public showMessage(): string {
-    return `always new service ${setColor("blue", this.id)}`;
+    return this.id;
   }
 
 }
@@ -149,7 +148,9 @@ export class Service02 implements InterfaceClass {
   }
 
   public showMessage() {
-    return `alaways new service02 [ ${setColor("cyan", this.id)} ] call(1) : ${this.sService.showMessage()}, call(2) : ${this.service0.showMessage()}`;
+    return `this service       : [${setColor("red", this.id)}]
+singleton service  : [${setColor("cyan", this.sService.showMessage())}]
+newable service    : [${setColor("green", this.service0.showMessage())}]\n`;
   }
 
 }
