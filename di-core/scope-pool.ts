@@ -5,12 +5,12 @@ export class DIScopePool {
   private instanceMap = new Map<InjectToken, any>();
 
   setInstance<T>(token: InjectToken<T>, instance: T): void {
-    this.instanceMap.set(token, instance);
+    this.instanceMap.set(token, instance || null);
   }
 
-  getInstance<T>(token: InjectToken<T>): T | null {
+  getInstance<T>(token: InjectToken<T>): T | null | undefined {
     const instance = this.instanceMap.get(token);
-    return instance || null;
+    return instance;
   }
 
   update(newMaps: Array<[InjectToken, any]>): void;

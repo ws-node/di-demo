@@ -96,13 +96,20 @@ export abstract class DIContainer {
         if (!scopeId) return fac();
         const pool = this.scopePools.get(<string>scopeId);
         if (!pool) {
-          const instance = this.get(token);
+          const instance = fac();
           const newPool = new DIScopePool();
           newPool.setInstance(token, instance);
           this.scopePools.set(<string>scopeId, newPool);
           return <T>instance;
         } else {
-          return <T>pool.getInstance(token);
+          const poolInstance = pool.getInstance(token);
+          if (poolInstance === undefined) {
+            const instance = fac();
+            pool.setInstance(token, instance);
+            return instance;
+          } else {
+            return poolInstance;
+          }
         }
       };
     }
