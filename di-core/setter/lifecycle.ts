@@ -6,3 +6,7 @@ export interface OnInit {
 export interface OnUpdate {
   onUpdate(): void;
 }
+
+export interface OnDispose {
+  onDispose(): void;
+}
