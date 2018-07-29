@@ -12,11 +12,11 @@ export class SetterDI extends DIContainer {
       token,
       imp,
       scope,
-      depts: this.setRelations(prototype)
+      depts: this.resolveRelations(prototype)
     });
   }
 
-  private setRelations(imp_proto: any) {
+  private resolveRelations(imp_proto: any) {
     return getClassPropertyKeys(imp_proto).map(key => {
       const dept = getDependencies(imp_proto, key)[0];
       const relation = this.propertyDependencyMap.get(imp_proto);
