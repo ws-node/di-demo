@@ -31,7 +31,7 @@ export function serverStart() {
     // .service(Service015, InjectScope.Singleton)
     // .service(Service016, InjectScope.Singleton)
     .service(Service01, InjectScope.New)
-    .service(InterfaceClass, Service02, InjectScope.New)
+    .service(InterfaceClass, Service02, InjectScope.Scope)
     .service(SingletonService01, InjectScope.Singleton)
     .run();
 

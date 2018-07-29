@@ -7,9 +7,7 @@ export class SetterInjectSystem extends InjectSystemBase {
   protected di = sdi;
 
   public get<T>(token: InjectToken<T>, scopeId?: string) {
-    return !scopeId ?
-      this.di.get(token) :
-      this.di.getScopeInstance(token, scopeId);
+    return this.di.get(token, scopeId);
   }
 
   public run() {

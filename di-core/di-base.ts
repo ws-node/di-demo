@@ -11,7 +11,7 @@ import { DIScopePool } from "./scope-pool";
 
 export interface DIContainerEntry<T> extends DepedencyResolveEntry<T> {
   fac: Nullable<ImplementFactory<any>>;
-  getInstance: Nullable<() => T>;
+  getInstance: Nullable<(scopeId?: string) => T | null>;
   level: number;
 }
 
@@ -44,23 +44,10 @@ export abstract class DIContainer {
     this.resolve();
   }
 
-  public get<T>(token: InjectToken<T>): T | null {
+  public get<T>(token: InjectToken<T>, scopeId?: string): T | null {
     const value = this.map.get(token) || null;
     if (value === null || value.getInstance === null) return null;
-    return value.getInstance() || null;
-  }
-
-  public getScopeInstance<T>(token: InjectToken<T>, scopeId: string) {
-    const pool = this.scopePools.get(scopeId);
-    if (!pool) {
-      const instance = this.get(token);
-      const newPool = new DIScopePool();
-      newPool.setInstance(token, instance);
-      this.scopePools.set(scopeId, newPool);
-      return instance;
-    } else {
-      return pool.getInstance(token);
-    }
+    return value.getInstance(scopeId) || null;
   }
 
   public getConfig() {
@@ -81,7 +68,7 @@ export abstract class DIContainer {
     const queue = Array.from(this.map.values());
     this.sort(queue)
       .forEach(item =>
-        item.getInstance = scopeMark(item.scope, this.createFactory(item)));
+        item.getInstance = this.scopeMark(item, this.createFactory(item)));
   }
 
   private sort(queue: DeptNode[]): DeptNode[] {
@@ -101,6 +88,33 @@ export abstract class DIContainer {
     this.decideSection(queue.filter(i => !wants.includes(i)), sourceQueue, sections, current + 1);
   }
 
+  private scopeMark<T>(item: DIContainerEntry<T>, fac: ImplementFactory<T>): Nullable<(scopeId?: string) => T | null> {
+    const { scope, token } = item;
+    if (scope === InjectScope.New) return () => fac();
+    if (scope === InjectScope.Scope) {
+      return (scopeId?: string) => {
+        if (!scopeId) return fac();
+        const pool = this.scopePools.get(<string>scopeId);
+        if (!pool) {
+          const instance = this.get(token);
+          const newPool = new DIScopePool();
+          newPool.setInstance(token, instance);
+          this.scopePools.set(<string>scopeId, newPool);
+          return <T>instance;
+        } else {
+          return <T>pool.getInstance(token);
+        }
+      };
+    }
+    return (() => {
+      let instance: any;
+      return () => {
+        if (instance) return instance;
+        return instance = fac();
+      };
+    })();
+  }
+
 }
 
 function resolveUnder(node: DeptNode, sections: Array<DeptNode[]>, checkIndex: number, sourceQueue: DeptNode[]) {
@@ -114,17 +128,6 @@ function resolveUnder(node: DeptNode, sections: Array<DeptNode[]>, checkIndex: n
   const isresolved = node.depts.every(i => checkArr.map(m => m.token).includes(i));
   if (!isresolved && !node.depts.every(i => sourceQueue.map(m => m.token).includes(i))) throw resolveError(node.imp, node.depts);
   return isresolved;
-}
-
-function scopeMark(scope: InjectScope, fac: ImplementFactory<any>) {
-  if (scope === InjectScope.New) return () => fac();
-  return (() => {
-    let instance: any;
-    return () => {
-      if (instance) return instance;
-      return instance = fac();
-    };
-  })();
 }
 
 function resolveError(el: any, depts: any[]) {
