@@ -4,13 +4,28 @@ import { InjectToken, Implement, InjectScope, ImplementFactory } from "../../dec
 
 export class SetterDI extends DIContainer {
 
+  private propertyDependencyMap = new Map<any, { [key: string]: InjectToken }>();
+
   public add<K, V>(token: InjectToken<K>, imp: Implement<V>, scope: InjectScope) {
     const { prototype } = <any>imp;
     this.set(token, {
       token,
       imp,
       scope,
-      depts: getClassPropertyKeys(prototype).map(key => getDependencies(prototype, key)[0])
+      depts: this.setRelations(prototype)
+    });
+  }
+
+  private setRelations(imp_proto: any) {
+    return getClassPropertyKeys(imp_proto).map(key => {
+      const dept = getDependencies(imp_proto, key)[0];
+      const relation = this.propertyDependencyMap.get(imp_proto);
+      if (!relation) {
+        this.propertyDependencyMap.set(imp_proto, { [key]: dept });
+      } else {
+        relation[key] = dept;
+      }
+      return dept;
     });
   }
 
@@ -20,13 +35,17 @@ export class SetterDI extends DIContainer {
       const { prototype } = <any>imp;
       item.fac = () => {
         const instance = new (imp)();
-        getClassPropertyKeys(prototype).forEach((key, index) => {
-          if (typeof instance[key] === "function") {
-            instance[key](this.get(depts[index]));
-          } else {
-            instance[key] = this.get(depts[index]);
-          }
-        });
+        const relation = this.propertyDependencyMap.get(prototype);
+        if (relation) {
+          Object.keys(relation).forEach(key => {
+            const dept = relation[key];
+            if (typeof instance[key] === "function") {
+              instance[key](this.get(dept));
+            } else {
+              instance[key] = this.get(dept);
+            }
+          });
+        }
         if (prototype && prototype["onInit"] && typeof instance["onInit"] === "function") {
           instance["onInit"]();
         }
