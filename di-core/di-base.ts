@@ -90,36 +90,38 @@ export abstract class DIContainer {
 
   private scopeMark<T>(item: DIContainerEntry<T>, fac: ImplementFactory<T>): Nullable<(scopeId?: string) => T | null> {
     const { scope, token } = item;
-    if (scope === InjectScope.New) return () => fac();
-    if (scope === InjectScope.Scope) {
-      return (scopeId?: string) => {
-        if (!scopeId) return fac();
-        const pool = this.scopePools.get(<string>scopeId);
-        if (!pool) {
-          const instance = fac();
-          const newPool = new DIScopePool();
-          newPool.setInstance(token, instance);
-          this.scopePools.set(<string>scopeId, newPool);
-          return <T>instance;
-        } else {
-          const poolInstance = pool.getInstance(token);
-          if (poolInstance === undefined) {
+    switch (scope) {
+      case InjectScope.New:
+      case InjectScope.Scope:
+        return (scopeId?: string) => {
+          if (!scopeId) return fac();
+          const pool = this.scopePools.get(<string>scopeId);
+          if (!pool) {
             const instance = fac();
-            pool.setInstance(token, instance);
-            return instance;
+            const newPool = new DIScopePool();
+            newPool.setInstance(token, instance);
+            this.scopePools.set(<string>scopeId, newPool);
+            return <T>instance;
           } else {
-            return poolInstance;
+            const poolInstance = pool.getInstance(token);
+            if (poolInstance === undefined) {
+              const instance = fac();
+              pool.setInstance(token, instance);
+              return instance;
+            } else {
+              return poolInstance;
+            }
           }
-        }
-      };
+        };
+      default:
+        return (() => {
+          let instance: any;
+          return () => {
+            if (instance) return instance;
+            return instance = fac();
+          };
+        })();
     }
-    return (() => {
-      let instance: any;
-      return () => {
-        if (instance) return instance;
-        return instance = fac();
-      };
-    })();
   }
 
 }
