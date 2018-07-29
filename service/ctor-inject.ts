@@ -2,7 +2,7 @@ import { Service } from "../di-core/constructor/decorator";
 import { createUUID, setColor } from "../utils";
 
 @Service()
-export class CtorService0x01 {
+export class Service0x01 {
 
   private id = createUUID();
 
@@ -13,11 +13,11 @@ export class CtorService0x01 {
 }
 
 @Service()
-export class CtorService0x02 {
+export class Service0x02 {
 
   private id = createUUID();
 
-  constructor(private s0x01: CtorService0x01) { }
+  constructor(private s0x01: Service0x01) { }
 
   public showMessage(): string {
     return `always new service ${setColor("blue", this.id)}`;
@@ -26,11 +26,11 @@ export class CtorService0x02 {
 }
 
 @Service()
-export class CtorService011 {
+export class Service011 {
 
   private id = createUUID();
 
-  constructor(private s0x02: CtorService0x02) { }
+  constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
     return `always new service ${setColor("blue", this.id)}`;
@@ -39,11 +39,11 @@ export class CtorService011 {
 }
 
 @Service()
-export class CtorService012 {
+export class Service012 {
 
   private id = createUUID();
 
-  constructor(private s0x02: CtorService0x02) { }
+  constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
     return `always new service ${setColor("blue", this.id)}`;
@@ -52,11 +52,11 @@ export class CtorService012 {
 }
 
 @Service()
-export class CtorService013 {
+export class Service013 {
 
   private id = createUUID();
 
-  constructor(private s0x02: CtorService0x02) { }
+  constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
     return `always new service ${setColor("blue", this.id)}`;
@@ -65,11 +65,11 @@ export class CtorService013 {
 }
 
 @Service()
-export class CtorService014 {
+export class Service014 {
 
   private id = createUUID();
 
-  constructor(private s0x02: CtorService0x02) { }
+  constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
     return `always new service ${setColor("blue", this.id)}`;
@@ -78,11 +78,11 @@ export class CtorService014 {
 }
 
 @Service()
-export class CtorService015 {
+export class Service015 {
 
   private id = createUUID();
 
-  constructor(private s0x02: CtorService0x02) { }
+  constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
     return `always new service ${setColor("blue", this.id)}`;
@@ -91,11 +91,11 @@ export class CtorService015 {
 }
 
 @Service()
-export class CtorService016 {
+export class Service016 {
 
   private id = createUUID();
 
-  constructor(private s0x02: CtorService0x02) { }
+  constructor(private s0x02: Service0x02) { }
 
   public showMessage(): string {
     return `always new service ${setColor("blue", this.id)}`;
@@ -104,7 +104,7 @@ export class CtorService016 {
 }
 
 @Service()
-export class CtorSingletonService01 {
+export class SingletonService01 {
 
   private id = createUUID();
 
@@ -115,11 +115,11 @@ export class CtorSingletonService01 {
 }
 
 @Service()
-export class CtorService01 {
+export class Service01 {
 
   private id = createUUID();
 
-  constructor(private s0x02: CtorService011) { }
+  constructor(private s0x02: Service011) { }
 
   public showMessage(): string {
     return `always new service ${setColor("blue", this.id)}`;
@@ -132,19 +132,19 @@ export abstract class InterfaceClass {
 }
 
 @Service()
-export class CtorService02 implements InterfaceClass {
+export class Service02 implements InterfaceClass {
 
   private id = createUUID();
 
   constructor(
-    private service0: CtorService01,
-    private service011: CtorService011,
-    private service012: CtorService012,
-    private service013: CtorService013,
-    private service014: CtorService014,
-    private service015: CtorService015,
-    private service016: CtorService016,
-    private sService: CtorSingletonService01) {
+    private service0: Service01,
+    private service011: Service011,
+    private service012: Service012,
+    private service013: Service013,
+    private service014: Service014,
+    private service015: Service015,
+    private service016: Service016,
+    private sService: SingletonService01) {
 
   }
 

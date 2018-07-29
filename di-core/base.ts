@@ -13,7 +13,7 @@ export * from "./di-base";
 
 export abstract class InjectSystemBase implements DISystemContract {
 
-  protected di!: DIContainer;
+  protected abstract di: DIContainer;
 
   service<T>(service: Constructor<T>, scope?: InjectScope): DISystemContract;
   service<T, V>(token: InjectToken<T>, instance: V): DISystemContract;

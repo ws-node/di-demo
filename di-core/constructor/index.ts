@@ -1,11 +1,11 @@
 import { ConstructorInjectSystem } from "./system";
 import {
-  CtorService02, CtorService01,
-  CtorSingletonService01, InterfaceClass,
-  CtorService011, CtorService012,
-  CtorService013, CtorService014,
-  CtorService015, CtorService016,
-  CtorService0x01, CtorService0x02
+  Service02, Service01,
+  SingletonService01, InterfaceClass,
+  Service011, Service012,
+  Service013, Service014,
+  Service015, Service016,
+  Service0x01, Service0x02
 } from "./../../service";
 import { InjectScope } from "./../../declares";
 import { setColor } from "./../../utils";
@@ -14,14 +14,14 @@ export function serverStart() {
 
   const cdi = new ConstructorInjectSystem();
   cdi
-    .service(CtorService0x01, new CtorService0x01())
-    .service(CtorService0x02, () => new CtorService0x02(new CtorService0x01()), InjectScope.New)
-    .service(CtorService011, InjectScope.New)
-    .service(CtorService012, InjectScope.New)
-    .service(CtorService013, InjectScope.New)
-    .service(CtorService014, InjectScope.New)
-    .service(CtorService015, InjectScope.New)
-    .service(CtorService016, InjectScope.New)
+    .service(Service0x01, new Service0x01())
+    .service(Service0x02, () => new Service0x02(new Service0x01()), InjectScope.New)
+    .service(Service011, InjectScope.New)
+    .service(Service012, InjectScope.New)
+    .service(Service013, InjectScope.New)
+    .service(Service014, InjectScope.New)
+    .service(Service015, InjectScope.New)
+    .service(Service016, InjectScope.New)
     // .service(CtorService0x01, InjectScope.Singleton)
     // .service(CtorService0x02, InjectScope.Singleton)
     // .service(CtorService011, InjectScope.Singleton)
@@ -30,9 +30,9 @@ export function serverStart() {
     // .service(CtorService014, InjectScope.Singleton)
     // .service(CtorService015, InjectScope.Singleton)
     // .service(CtorService016, InjectScope.Singleton)
-    .service(CtorService01, InjectScope.New)
-    .service(InterfaceClass, CtorService02, InjectScope.New)
-    .service(CtorSingletonService01, InjectScope.Singleton)
+    .service(Service01, InjectScope.New)
+    .service(InterfaceClass, Service02, InjectScope.New)
+    .service(SingletonService01, InjectScope.Singleton)
     .run();
   console.log("running");
   const s02 = cdi.get(InterfaceClass);
@@ -51,7 +51,7 @@ export function serverStart() {
   // test service01
   const beforeTime01 = new Date().getTime();
   for (let i = 0; i < 10000; i++) {
-    cdi.get(CtorService01);
+    cdi.get(Service01);
   }
   const afterTime01 = new Date().getTime();
   console.log(`10^4-service01-calling cost ${setColor("green", afterTime01 - beforeTime01)}ms`);

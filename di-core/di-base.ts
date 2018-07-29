@@ -7,6 +7,7 @@ import {
   ImplementFactory
 } from "../declares";
 import { TypeCheck, setColor } from "../utils";
+import { DIScopePool } from "./scope-pool";
 
 export interface DIContainerEntry<T> extends DepedencyResolveEntry<T> {
   fac: Nullable<ImplementFactory<any>>;
@@ -21,6 +22,8 @@ export abstract class DIContainer {
   private sections: Array<DeptNode[]> = [];
   private map = new Map<any, DeptNode>();
   private sorted: DeptNode[] = [];
+
+  protected scopePools = new Map<string, DIScopePool>();
 
   public abstract add<K, V>(token: InjectToken<K>, imp: Implement<V>, scope: InjectScope): void;
   public abstract createFactory<T>(imp: DIContainerEntry<T>): ImplementFactory<T>;
